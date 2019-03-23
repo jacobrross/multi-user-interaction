@@ -44,27 +44,27 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
             let socket = io();
+            let BIG = document.getElementById("pillar-01");
+            let BIG2 = document.getElementById("pillar-02");
+            let MED = document.getElementById("pillar-03");
+            let SML = document.getElementById("pillar-04");
 
             //default connect event
             socket.on('connect', function() {
                 console.log("connected!");
             });
 
-            //let's send some events to the server to pass on. Programmatic telephone game!
-            //querySelector() is a more modern and versatile function of getElementById()
-            //#name or class
-            //.name for classes
-            //etc.
-            //https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector 
-            //note that querySelector can also be used on elements so that you only search for their children
-            //instead of all elements within teh "document"
             document.querySelector('#Biggest').addEventListener('click', function() {
                 socket.emit('red');
-
+                
             });
 
             document.querySelector('#Biggest2').addEventListener('click', function() {
                 socket.emit('green');
+            });
+
+            document.querySelector('#Medium').addEventListener('click', function() {
+                socket.emit('green2');
             });
 
             socket.on('color_change', function(data) {

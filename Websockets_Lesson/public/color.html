@@ -29,10 +29,10 @@
    
            <a-sky color="#ECECEC"></a-sky>
 
-           <a-entity id"big" obj-model="obj:#pillar-01;" position="-6 0 -4" scale="" material="color:#000000"></a-entity>
-           <a-entity id"big2" obj-model="obj:#pillar-02;" position="-2 0 -4" scale="" material="color:#000000"></a-entity>
-           <a-entity id"med" obj-model="obj:#pillar-03;" position="2 0 -4" scale="" material="color:#000000"></a-entity>
-           <a-entity id"sml" obj-model="obj:#pillar-04;" position="6 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity remove-component id"big" obj-model="obj:#pillar-01;" position="-6 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity remove-component id"big2" obj-model="obj:#pillar-02;" position="-2 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity remove-component id"med" obj-model="obj:#pillar-03;" position="2 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity remove-component id"sml" obj-model="obj:#pillar-04;" position="6 0 -4" scale="" material="color:#000000"></a-entity>
 
 
        </a-scene>
@@ -40,20 +40,42 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
             let socket = io();
+            let BIG = document.getElementById("pillar-01");
+            let BIG2 = document.getElementById("pillar-02");
+            let MED = document.getElementById("pillar-03");
+            let SML = document.getElementById("pillar-04");
 
             //default connect event
             socket.on('connect', function() {
                 console.log("connected!");
             });
 
-            socket.on('color_change', function(data) {
+            socket.on('remove-component', function(data) {
                 //create rgb color string for css
                 let colorStr = 'rgb(' + data.r + ',' + data.g + ',' + data.b + ')';
                 console.log("color received: " + colorStr);
+                
+                ////
+                AFRAME.registerComponent('remove-component', {
+                    schema: {},
+                    init : function() {
+                        const Context_AF = this;
+              
+                            Context_AF.deleteMyself();
+
+                    },
+                    deleteMyself : function() {
+                        const Context_AF = this;
+                        Context_AF.el.parentNode.removeChild(Context_AF.el); 
+                        
+                        
+                }
+            });
 
                 //set background color with received color
                 document.body.style.backgroundColor = colorStr;
             });
+            
         </script>
     </body>
 </html>
