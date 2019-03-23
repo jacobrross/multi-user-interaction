@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
+            <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
-        <h1>This is the controller client</h1>
+        <h1>CHOOSE THE BIGGEST BLOCK</h1>
 
         <!-- some very nice color buttons -->
-        <button id="red" style="background-color:red; color:whitesmoke;">RED</button>
-        <button id="green" style="background-color:green; color:whitesmoke;">BLUE</button>
-        <button id="blue" style="background-color:blue; color:whitesmoke;">GREEN</button>
+        <button id="Biggest" style="background-color:black; color:whitesmoke; height:108px;width:108px";></button>
+        <button id="Biggest2" style="background-color:black; color:whitesmoke; height:102px;width:102px";></button>
+        <button id="Medium" style="background-color:black; color:whitesmoke; height:104px;width:104px";></button>
+        <button id="Small" style="background-color:black; color:whitesmoke; height:110px;width:110px";></button>
+
+        <a-scene>
+
+            <!-- This code makes it so the user has to click on the objects to activate their actions -->
+            <a-entity position="2.5 2 5 " camera look-controls wasd-controls>
+               <a-entity cursor="fuse:false; fuseTimeout:500; rayOrigin:mouse";></a-entity>
+                   <a-cursor id="cursor"
+                   animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+                   animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+                   event-set__1="_event: mouseenter; color: springgreen"
+                   event-set__2="_event: mouseleave; color: black"
+                   fuse="true"
+                   raycaster="objects: .link">
+                   </a-cursor>
+               </a-entity>
+           </a-entity>
+   
+           <a-entity player2 obj-model="obj:#player-obj;" position="0 0 0" scale="0.1 0.1 0.1" rotation="-90 0 90" material="color:#008000; sphericalEnvMap:#skymap; roughness:0.5; metalness:0.2;" shadow="cast:true; receive:true;"></a-entity>
+       </a-scene>
 
         <!-- scripts go to bottom if you want them to execute AFTER the rest of the web page renders -->
+
+        <script>
+            document.getElementById("Biggest").addEventListener("click", myFunction);
+                
+            function myFunction() {
+                document.getElementById('Biggest').disabled = true;
+            }
+        </script>
+
         <script src="/socket.io/socket.io.js"></script>
         <script>
             let socket = io();
@@ -28,17 +58,24 @@
             //https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector 
             //note that querySelector can also be used on elements so that you only search for their children
             //instead of all elements within teh "document"
-            document.querySelector('#red').addEventListener('click', function() {
+            document.querySelector('#Biggest').addEventListener('click', function() {
                 socket.emit('red');
+
             });
 
-            document.querySelector('#green').addEventListener('click', function() {
+            document.querySelector('#Biggest2').addEventListener('click', function() {
                 socket.emit('green');
             });
 
-            document.querySelector('#blue').addEventListener('click', function() {
-                socket.emit('blue');
-            });
+            socket.on('color_change', function(data) {
+            //create rgb color string for css
+            let colorStr = 'rgb(' + data.r + ',' + data.g + ',' + data.b + ')';
+            console.log("color received: " + colorStr);
+
+            //set background color with received color
+            document.body.style.backgroundColor = colorStr;
+        });
+
         </script>
     </body>
 </html>

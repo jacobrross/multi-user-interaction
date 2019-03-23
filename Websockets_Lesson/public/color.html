@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <script src="/js/aframe-v0.8.2.min.js"></script>
+        <script src="/js/remove-component.js"></script>
+        <script src="/js/biggest.js"></script>
     </head>
     <body>
-        <h1>This is the color client</h1>
+        <a-scene>
+            <a-assets>
+                <a-asset-item crossorigin="anonymous" id="pillar-01" src="/assets/pillar_01.obj"></a-asset-item>
+                <a-asset-item crossorigin="anonymous" id="pillar-02" src="/assets/pillar_02.obj"></a-asset-item>
+                <a-asset-item crossorigin="anonymous" id="pillar-03" src="/assets/pillar_03.obj"></a-asset-item>
+                <a-asset-item crossorigin="anonymous" id="pillar-04" src="/assets/pillar_04.obj"></a-asset-item>
+            </a-assets>
+            <!-- This code makes it so the user has to click on the objects to activate their actions -->
+            <a-entity position="2.5 2 5 " camera look-controls wasd-controls>
+               <a-entity cursor="fuse:false; fuseTimeout:500; rayOrigin:mouse";></a-entity>
+                   <a-cursor id="cursor"
+                   animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+                   animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+                   event-set__1="_event: mouseenter; color: springgreen"
+                   event-set__2="_event: mouseleave; color: black"
+                   fuse="true"
+                   raycaster="objects: .link">
+                   </a-cursor>
+               </a-entity>
+           </a-entity>
+   
+           <a-sky color="#ECECEC"></a-sky>
+
+           <a-entity id"big" obj-model="obj:#pillar-01;" position="-6 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity id"big2" obj-model="obj:#pillar-02;" position="-2 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity id"med" obj-model="obj:#pillar-03;" position="2 0 -4" scale="" material="color:#000000"></a-entity>
+           <a-entity id"sml" obj-model="obj:#pillar-04;" position="6 0 -4" scale="" material="color:#000000"></a-entity>
+
+
+       </a-scene>
 
         <script src="/socket.io/socket.io.js"></script>
         <script>
